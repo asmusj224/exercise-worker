@@ -5,7 +5,10 @@ from datetime import datetime
 import psycopg2
 import logging
 import logging.handlers
+from dotenv import load_dotenv
 
+
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -32,6 +35,8 @@ upper_body = f"{BASE_QUERY} where rank <= 2 and category IN ('Chest', 'Back', 'B
 yoga = f"{BASE_QUERY} where rank = 1 and category = 'yoga'"
 
 workout_splits = [lower_body, upper_body, yoga, lower_body, upper_body]
+
+
 
 
 def generate_workout():
