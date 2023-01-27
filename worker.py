@@ -44,7 +44,9 @@ utc_dt = datetime.now(timezone.utc)
 def generate_workout():
     try:
         today_dt = utc_dt.astimezone(PST).today()
-        logger.info(f'Today {datetime.now(timezone.utc)}')
+        # print(f'{today_dt}')
+        # print(f'Today {datetime.now(timezone.utc)}')
+        print(utc_dt.today().weekday())
         to_email = os.environ.get('TO_EMAIL')
         from_email = os.environ.get('FROM_EMAIL')
         conn = psycopg2.connect(os.environ.get('DATABASE_URL'))
@@ -54,7 +56,7 @@ def generate_workout():
         cursor.execute(workout_splits[day_of_week_index])
         rows = cursor.fetchall()
         message = ''
-        subject = f"Workouts {today_dt.strftime('%Y-%m-%d')}"
+        subject = f"Workouts {today_dt.weekday()}"
         for row in rows:
             exercise_name, exercise_description, exercise_category = row
             message += f'<h3>{exercise_name}</h3> <b>{exercise_category}</b> <p>{exercise_description}</p>'
