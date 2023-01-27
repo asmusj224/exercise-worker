@@ -44,6 +44,7 @@ utc_dt = datetime.now(timezone.utc)
 def generate_workout():
     try:
         today_dt = utc_dt.astimezone(PST).today()
+        logger.info(f'Today {datetime.now(timezone.utc)}')
         to_email = os.environ.get('TO_EMAIL')
         from_email = os.environ.get('FROM_EMAIL')
         conn = psycopg2.connect(os.environ.get('DATABASE_URL'))
