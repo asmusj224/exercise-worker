@@ -36,9 +36,6 @@ yoga = f"{BASE_QUERY} where rank = 1 and category = 'yoga'"
 
 workout_splits = [lower_body, upper_body, yoga, lower_body, upper_body]
 
-
-
-
 def generate_workout():
     try:
         to_email = os.environ.get('TO_EMAIL')

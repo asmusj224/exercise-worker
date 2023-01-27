@@ -3,14 +3,14 @@ name: Generate workout
 on:
   push:
   schedule:
-    - cron: '*/5 * * * *' # At 05:00 on Monday - Friday
+    - cron: '*/15 * * * *' # At 05:00 on Monday - Friday
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: checkout repo content
-        uses: actions/checkout@v2 # checkout the repository content to github runner
+        uses: actions/checkout@v3 # checkout the repository content to github runner
 
       - name: setup python
         uses: actions/setup-python@v4
