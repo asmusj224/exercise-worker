@@ -1,0 +1,17 @@
+version: '3.3'
+services:
+  db:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    ports:
+      - 5435:5432
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres-data:/data/db
+
+volumes:
+  postgres-data:
+    driver: local
