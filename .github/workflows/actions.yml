@@ -3,7 +3,7 @@ name: Generate workout
 on:
   push:
   schedule:
-    - cron: '*/15 * * * *' # At 05:00 on Monday - Friday
+    - cron: '0 5 * * 1-5' # At 05:00 on Monday - Friday
 
 jobs:
   build:
