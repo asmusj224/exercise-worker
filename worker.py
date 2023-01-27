@@ -1,12 +1,23 @@
-from apscheduler.schedulers.blocking import BlockingScheduler
 import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from datetime import datetime
 import psycopg2
-from dotenv import load_dotenv
+import logging
+import logging.handlers
 
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+logger_file_handler = logging.handlers.RotatingFileHandler(
+    "status.log",
+    maxBytes=1024 * 1024,
+    backupCount=1,
+    encoding="utf8",
+)
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+logger_file_handler.setFormatter(formatter)
+logger.addHandler(logger_file_handler)
 
 BASE_QUERY = '''
    select ranked_exercises.name, ranked_exercises.description, ranked_exercises.category from 
@@ -22,13 +33,11 @@ yoga = f"{BASE_QUERY} where rank = 1 and category = 'yoga'"
 
 workout_splits = [lower_body, upper_body, yoga, lower_body, upper_body]
 
-load_dotenv()
 
-schedule = BlockingScheduler()
-
-@schedule.scheduled_job('cron', day_of_week='mon-fri', hour=5)
 def generate_workout():
     try:
+        to_email = os.environ.get('TO_EMAIL')
+        from_email = os.environ.get('FROM_EMAIL')
         conn = psycopg2.connect(os.environ.get('DATABASE_URL'))
         sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
         day_of_week_index = datetime.today().weekday()
@@ -36,17 +45,18 @@ def generate_workout():
         cursor.execute(workout_splits[day_of_week_index])
         rows = cursor.fetchall()
         message = ''
-        subject = 'Workouts'
+        subject = f"Workouts {datetime.today().strftime('%Y-%m-%d')}"
         for row in rows:
             exercise_name, exercise_description, exercise_category = row
             message += f'<h3>{exercise_name}</h3> <b>{exercise_category}</b> <p>{exercise_description}</p>'
-        email = Mail(from_email="me@jeffasmus.com", to_emails="jeffrey.asmus88@gmail.com", subject=subject, html_content=message)
+        email = Mail(from_email=from_email, to_emails=to_email, subject=subject, html_content=message)
         sg.send(email)
 
 
     except Exception as e:
-        print('Worker failed')
-        print(e)
+        logger.info(f'An error occured {e}')
+
+if __name__ == "__main__":
+    generate_workout()
 
 
-schedule.start()
