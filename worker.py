@@ -1,11 +1,12 @@
 import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
-from datetime import datetime
+from datetime import datetime, timezone
 import psycopg2
 import logging
 import logging.handlers
 from dotenv import load_dotenv
+import pytz
 
 
 load_dotenv()
@@ -36,18 +37,23 @@ yoga = f"{BASE_QUERY} where rank = 1 and category = 'yoga'"
 
 workout_splits = [lower_body, upper_body, yoga, lower_body, upper_body]
 
+PST = pytz.timezone('US/Pacific')
+utc_dt = datetime.now(timezone.utc)
+
+
 def generate_workout():
     try:
+        today_dt = utc_dt.astimezone(PST).today()
         to_email = os.environ.get('TO_EMAIL')
         from_email = os.environ.get('FROM_EMAIL')
         conn = psycopg2.connect(os.environ.get('DATABASE_URL'))
         sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-        day_of_week_index = datetime.today().weekday()
+        day_of_week_index = today_dt.weekday()
         cursor = conn.cursor()
         cursor.execute(workout_splits[day_of_week_index])
         rows = cursor.fetchall()
         message = ''
-        subject = f"Workouts {datetime.today().strftime('%Y-%m-%d')}"
+        subject = f"Workouts {today_dt.strftime('%Y-%m-%d')}"
         for row in rows:
             exercise_name, exercise_description, exercise_category = row
             message += f'<h3>{exercise_name}</h3> <b>{exercise_category}</b> <p>{exercise_description}</p>'
