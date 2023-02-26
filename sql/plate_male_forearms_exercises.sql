@@ -2,7 +2,7 @@ INSERT INTO exercise (name, description, category) VALUES ('Plate Pinch Grip Sid
 Keep your hips and shoulders facing forward, bend to one side slowly
 Return to the upright position.
 Switch hands and repeat', 'forearms') ON CONFLICT (name) DO NOTHING;
-INSERT INTO exercise (name, description, category) VALUES ('Plate Pinch Grip Farmer's Carry', 'Stand straight with the plate held at your side
+INSERT INTO exercise (name, description, category) VALUES ('Plate Pinch Grip Farmer''s Carry', 'Stand straight with the plate held at your side
 Keep your hips and shoulders facing forward, bend to one side slowly
 Return to the upright position.
 Switch hands and repeat', 'forearms') ON CONFLICT (name) DO NOTHING;

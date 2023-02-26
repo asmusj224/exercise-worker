@@ -70,7 +70,7 @@ INSERT INTO exercise (name, description, category) VALUES ('Band Bayesian Revers
 Flex your elbow until you feel your biceps contract. Then fully extend elbows.', 'forearms') ON CONFLICT (name) DO NOTHING;
 INSERT INTO exercise (name, description, category) VALUES ('Plate Pinch Grip Side Bend', 'Attach band to a low anchor point. . Point your palms toward your thighs.
 Flex your elbow until you feel your biceps contract. Then fully extend elbows.', 'forearms') ON CONFLICT (name) DO NOTHING;
-INSERT INTO exercise (name, description, category) VALUES ('Plate Pinch Grip Farmer's Carry', 'Attach band to a low anchor point. . Point your palms toward your thighs.
+INSERT INTO exercise (name, description, category) VALUES ('Plate Pinch Grip Farmer''s Carry', 'Attach band to a low anchor point. . Point your palms toward your thighs.
 Flex your elbow until you feel your biceps contract. Then fully extend elbows.', 'forearms') ON CONFLICT (name) DO NOTHING;
 INSERT INTO exercise (name, description, category) VALUES ('Plate Pinch Grip Deadlift', 'Attach band to a low anchor point. . Point your palms toward your thighs.
 Flex your elbow until you feel your biceps contract. Then fully extend elbows.', 'forearms') ON CONFLICT (name) DO NOTHING;
@@ -114,3 +114,4 @@ INSERT INTO exercise (name, description, category) VALUES ('Plate Staggered Pinc
 Flex your elbows pulling your forearms to your biceps. Your fists should land by your forehead.', 'forearms') ON CONFLICT (name) DO NOTHING;
 INSERT INTO exercise (name, description, category) VALUES ('TRX Reverse Curl', 'Start with a band attached to a high point, your feet staggered, and an overhand grip.
 Flex your elbows pulling your forearms to your biceps. Your fists should land by your forehead.', 'forearms') ON CONFLICT (name) DO NOTHING;
+
