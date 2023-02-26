@@ -29,10 +29,11 @@ BASE_QUERY = '''
     rank() OVER (PARTITION BY category ORDER BY random())
     FROM exercise) ranked_exercises
 '''
-CORE_WHERE_CLAUSE = "(rank = 1 and category = 'Core')"
+CORE_WHERE_CLAUSE = "(rank = 1 and category IN ('abdominals', 'obliques')"
 
-lower_body = f"{BASE_QUERY} where rank <= 6 and category = 'Legs' or {CORE_WHERE_CLAUSE}"
-upper_body = f"{BASE_QUERY} where rank <= 2 and category IN ('Chest', 'Back', 'Bicep', 'Traps', 'Shoulders', 'Triceps') or {CORE_WHERE_CLAUSE}"
+
+lower_body = f"{BASE_QUERY} where rank <= 2 category IN ('hamstrings', 'glutes', 'calves', 'quads') or {CORE_WHERE_CLAUSE}"
+upper_body = f"{BASE_QUERY} where rank <= 2 and category IN ('chest', 'lowerback', 'forearms', 'traps', 'lats', 'triceps', 'biceps', 'traps_middle', 'shoulders') or {CORE_WHERE_CLAUSE}"
 yoga = f"{BASE_QUERY} where rank = 1 and category = 'yoga'"
 
 workout_splits = [lower_body, upper_body, yoga, lower_body, upper_body]
