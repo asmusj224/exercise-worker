@@ -32,11 +32,11 @@ BASE_QUERY = '''
 CORE_WHERE_CLAUSE = "(rank = 1 and category IN ('abdominals', 'obliques'));"
 
 
-lower_body = f"{BASE_QUERY} where rank <= 2 and category IN ('hamstrings', 'glutes', 'calves', 'quads') or {CORE_WHERE_CLAUSE}"
-upper_body = f"{BASE_QUERY} where rank <= 2 and category IN ('chest', 'lowerback', 'forearms', 'traps', 'lats', 'triceps', 'biceps', 'traps_middle', 'shoulders') or {CORE_WHERE_CLAUSE}"
-yoga = f"{BASE_QUERY} where rank = 1 and category = 'yoga'"
+leg_day = f"{BASE_QUERY} where rank <= 2 and category IN ('hamstrings', 'glutes', 'calves', 'quads') or {CORE_WHERE_CLAUSE}"
+push_day = f"{BASE_QUERY} where rank <= 2 and category IN ('lats', 'lowerback', 'traps', 'traps_middle', 'biceps') or {CORE_WHERE_CLAUSE}"
+pull_day = f"{BASE_QUERY} where rank <= 3 and category IN ('chest', 'shoulders', 'triceps') or {CORE_WHERE_CLAUSE}"
 
-workout_splits = [lower_body, upper_body, yoga, lower_body, upper_body]
+workout_splits = [leg_day, push_day, pull_day, leg_day, push_day, pull_day]
 
 PST = pytz.timezone('US/Pacific')
 utc_dt = datetime.now(timezone.utc)
