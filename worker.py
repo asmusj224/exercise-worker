@@ -24,7 +24,7 @@ logger_file_handler.setFormatter(formatter)
 logger.addHandler(logger_file_handler)
 
 BASE_QUERY = '''
-   select ranked_exercises.name, ranked_exercises.description, ranked_exercises.category from 
+   select ranked_exercises.name, ranked_exercises.description, ranked_exercises.category, ranked_exercises.videos from 
    (SELECT exercise.*,
     rank() OVER (PARTITION BY category ORDER BY random())
     FROM exercise) ranked_exercises
@@ -56,8 +56,11 @@ def generate_workout():
         message = ''
         subject = f"Workouts {today_dt.strftime('%Y-%m-%d')}"
         for row in rows:
-            exercise_name, exercise_description, exercise_category = row
-            message += f'<h3>{exercise_name}</h3> <b>{exercise_category}</b> <p>{exercise_description}</p>'
+            exercise_name, exercise_description, exercise_category, videos = row
+            v = ''
+            for index, video in enumerate(videos):
+                v += f"<a href='{video}'>{index + 1}</a><br>"
+            message += f'<h3>{exercise_name}</h3> <b>{exercise_category}</b> <p>{exercise_description}</p>{v}'
         email = Mail(from_email=from_email, to_emails=to_email, subject=subject, html_content=message)
         sg.send(email)
 
