@@ -24,7 +24,7 @@ logger_file_handler.setFormatter(formatter)
 logger.addHandler(logger_file_handler)
 
 BASE_QUERY = '''
-   select ranked_exercises.name, ranked_exercises.description, ranked_exercises.category from 
+   select ranked_exercises.name, ranked_exercises.description, ranked_exercises.category, ranked_exercises.videos from 
    (SELECT exercise.*,
     rank() OVER (PARTITION BY category ORDER BY random())
     FROM exercise) ranked_exercises
@@ -32,11 +32,11 @@ BASE_QUERY = '''
 CORE_WHERE_CLAUSE = "(rank = 1 and category IN ('abdominals', 'obliques'));"
 
 
-lower_body = f"{BASE_QUERY} where rank <= 2 and category IN ('hamstrings', 'glutes', 'calves', 'quads') or {CORE_WHERE_CLAUSE}"
-upper_body = f"{BASE_QUERY} where rank <= 2 and category IN ('chest', 'lowerback', 'forearms', 'traps', 'lats', 'triceps', 'biceps', 'traps_middle', 'shoulders') or {CORE_WHERE_CLAUSE}"
-yoga = f"{BASE_QUERY} where rank = 1 and category = 'yoga'"
+leg_day = f"{BASE_QUERY} where rank <= 2 and category IN ('hamstrings', 'glutes', 'calves', 'quads') or {CORE_WHERE_CLAUSE}"
+push_day = f"{BASE_QUERY} where rank <= 2 and category IN ('lats', 'lowerback', 'traps', 'traps_middle', 'biceps') or {CORE_WHERE_CLAUSE}"
+pull_day = f"{BASE_QUERY} where rank <= 3 and category IN ('chest', 'shoulders', 'triceps') or {CORE_WHERE_CLAUSE}"
 
-workout_splits = [lower_body, upper_body, yoga, lower_body, upper_body]
+workout_splits = [leg_day, push_day, pull_day, leg_day, push_day, pull_day]
 
 PST = pytz.timezone('US/Pacific')
 utc_dt = datetime.now(timezone.utc)
@@ -56,8 +56,11 @@ def generate_workout():
         message = ''
         subject = f"Workouts {today_dt.strftime('%Y-%m-%d')}"
         for row in rows:
-            exercise_name, exercise_description, exercise_category = row
-            message += f'<h3>{exercise_name}</h3> <b>{exercise_category}</b> <p>{exercise_description}</p>'
+            exercise_name, exercise_description, exercise_category, videos = row
+            video_link_str = ''
+            for index, video in enumerate(videos):
+                video_link_str += f"<a href='{video}'>{exercise_name} example {index + 1}</a><br>"
+            message += f'<h3>{exercise_name}</h3> <b>{exercise_category}</b> <p>{exercise_description}</p>{video_link_str}'
         email = Mail(from_email=from_email, to_emails=to_email, subject=subject, html_content=message)
         sg.send(email)
 
