@@ -57,10 +57,10 @@ def generate_workout():
         subject = f"Workouts {today_dt.strftime('%Y-%m-%d')}"
         for row in rows:
             exercise_name, exercise_description, exercise_category, videos = row
-            v = ''
+            video_link_str = ''
             for index, video in enumerate(videos):
-                v += f"<a href='{video}'>{index + 1}</a><br>"
-            message += f'<h3>{exercise_name}</h3> <b>{exercise_category}</b> <p>{exercise_description}</p>{v}'
+                video_link_str += f"<a href='{video}'>{exercise_name} example {index + 1}</a><br>"
+            message += f'<h3>{exercise_name}</h3> <b>{exercise_category}</b> <p>{exercise_description}</p>{video_link_str}'
         email = Mail(from_email=from_email, to_emails=to_email, subject=subject, html_content=message)
         sg.send(email)
 
